@@ -1,0 +1,80 @@
+workflow ModelComparisonWorkflow {
+
+    task ModelLoader {
+        implementation "ModelLoader";
+    }
+
+    task InferenceEngine {
+        implementation "InferenceEngine";
+    }
+
+    task EvaluationMetrics {
+        implementation "EvaluationMetrics";
+    }
+
+    task Visualization {
+        implementation "Visualization";
+    }
+
+    START -> ModelLoader -> InferenceEngine -> EvaluationMetrics -> Visualization -> END;
+
+
+    define input data ImagePath;
+    define input data YOLOv8ModelPath;
+    define input data YOLOv5ModelPath;
+    define input data GroundTruthPath;
+    define input data IoUThreshold;
+
+    configure data ImagePath {
+        path "*.jpg";
+    }
+
+    configure data YOLOv8ModelPath {
+        path "YOLOv8s.pt";
+    }
+
+    configure data YOLOv5ModelPath {
+        path "YOLOv5s.pt";
+    }
+
+    configure data GroundTruthPath {
+        path "*.csv";
+    }
+
+    YOLOv8ModelPath --> ModelLoader.YOLOv8ModelPath;
+    YOLOv5ModelPath --> ModelLoader.YOLOv5ModelPath;
+
+    ImagePath --> InferenceEngine.ImagePath;
+    YOLOv8ModelPath --> InferenceEngine.YOLOv8ModelPath;
+    YOLOv5ModelPath --> InferenceEngine.YOLOv5ModelPath;
+
+    GroundTruthPath --> EvaluationMetrics.GroundTruthPath;
+
+    ImagePath --> Visualization.ImagePath;
+
+}
+
+
+workflow ModelComparisonWorkflow1 from ModelComparisonWorkflow {
+
+}
+
+
+experiment ModelComparisonExperiment {
+    intent testModelComparison;
+
+    control {
+        START -> S1 -> END;
+    }
+
+    space S1 of ModelComparisonWorkflow1 {
+        strategy randomsearch;
+        runs = 4;
+
+        param_values iou_threshold_values = range(30, 80);
+
+        task EvaluationMetrics {
+            param IoUThreshold = iou_threshold_values;
+        }
+    }
+}

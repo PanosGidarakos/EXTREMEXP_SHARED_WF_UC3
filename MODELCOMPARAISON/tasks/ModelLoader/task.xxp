@@ -1,0 +1,28 @@
+task ModelLoader {
+    implementation "ModelLoader/task.py";
+    venv "ModelLoader/requirements.txt";
+    python_version "3.9";
+
+    define input data YOLOv8ModelPath;
+    define input data YOLOv5ModelPath;
+
+    define metric YOLOv8_LOAD_TIME {
+        kind single-value;
+        type string;
+    }
+
+    define metric YOLOv5_LOAD_TIME {
+        kind single-value;
+        type string;
+    }
+
+    define metric YOLOv8_LOADED {
+        kind single-value;
+        type string;
+    }
+
+    define metric YOLOv5_LOADED {
+        kind single-value;
+        type string;
+    }
+}

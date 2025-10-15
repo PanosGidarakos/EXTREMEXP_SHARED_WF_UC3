@@ -1,0 +1,76 @@
+task InferenceEngine {
+    implementation "InferenceEngine/task.py";
+    venv "InferenceEngine/requirements.txt";
+    python_version "3.9";
+
+    define input data ImagePath;
+    define input data YOLOv8ModelPath;
+    define input data YOLOv5ModelPath;
+
+    define metric YOLOv8_INFERENCE_TIME {
+        kind single-value;
+        type string;
+    }
+
+    define metric YOLOv5_INFERENCE_TIME {
+        kind single-value;
+        type string;
+    }
+
+    define metric YOLOv8_DETECTIONS {
+        kind single-value;
+        type string;
+    }
+
+    define metric YOLOv5_DETECTIONS {
+        kind single-value;
+        type string;
+    }
+
+    define metric YOLOv8_MEAN_CONFIDENCE {
+        kind single-value;
+        type string;
+    }
+
+    define metric YOLOv5_MEAN_CONFIDENCE {
+        kind single-value;
+        type string;
+    }
+
+    define metric YOLOv8_DATA_SAVED {
+        kind single-value;
+        type string;
+    }
+
+    define metric YOLOv5_DATA_SAVED {
+        kind single-value;
+        type string;
+    }
+
+    // Prediction data as metrics
+    define metric YOLOv8_PREDICTIONS_JSON {
+        kind single-value;
+        type string;
+    }
+
+    define metric YOLOv5_PREDICTIONS_JSON {
+        kind single-value;
+        type string;
+    }
+
+    define metric YOLOv8_TOTAL_TIME {
+        kind single-value;
+        type string;
+    }
+
+    define metric YOLOv5_TOTAL_TIME {
+        kind single-value;
+        type string;
+    }
+
+    define metric NUM_IMAGES_PROCESSED {
+        kind single-value;
+        type string;
+    }
+
+}

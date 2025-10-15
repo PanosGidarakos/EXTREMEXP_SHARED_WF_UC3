@@ -1,0 +1,81 @@
+task SelectUsers {
+    implementation "SelectUsers/task.py";
+    venv "SelectUsers/requirements.txt";
+    python_version "3.9";
+
+    define input data UsersInfo;
+    define output data transmittedmsg;
+
+    define param num_users_selection {
+        type Integer;
+        default 10;
+        range (1,20);
+    }
+    define param user_profile_selection {
+        type String;
+        default "driving";
+        enum ("driving","walking","cycling");
+    }
+    define param selection_diameter_km {
+        type Float;
+        default 10.0;
+        range (1,50);
+    }
+    define param filter_only_available {
+        type String;
+        default "true";
+        enum ("true","false");
+    }
+    define param sort_by {
+        type String;
+        default "distance";
+        enum ("distance","travel_time");
+    }
+    define param osrm_timeout_s {
+        type Integer;
+        default 5;
+        range (1,30);
+    }
+    define param euclidian_filter_km {
+        type Integer;
+        default 20.0;
+        range (1,100);
+    }
+
+    define metric SELECTED_USERS {
+        //semanticType ML_Accuracy;
+        kind single-value;
+        type double;
+    }
+
+    define metric OSRM_RESULTS {
+        //semanticType ML_Accuracy;
+        kind single-value;
+        type string;
+    }
+
+    define metric TOTAL_COMPUTATION_TIME {
+        //semanticType Performance;
+        kind single-value;
+        type double;
+    }
+
+    define metric USER_COMPUTATION_TIMES {
+        //semanticType Performance;
+        kind single-value;
+        type string;
+    }
+
+    define metric USER_RESPONSE_ACCEPTED {
+        //semanticType User_Response;
+        kind single-value;
+        type string;
+    }
+
+    define metric FILTERING_METRICS {
+        //semanticType Filtering_Analysis;
+        kind single-value;
+        type string;
+    }
+
+}

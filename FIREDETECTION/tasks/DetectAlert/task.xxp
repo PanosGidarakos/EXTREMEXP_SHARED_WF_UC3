@@ -1,0 +1,55 @@
+task DetectAlert {
+    implementation "DetectAlert/task.py";
+    venv "DetectAlert/requirements.txt";
+    python_version "3.9";
+
+    define input data ModelFile;
+
+    define metric INFERENCE_TIME {
+        //semanticType ML_Accuracy;
+        kind single-value;
+        type string;
+    }
+    
+    define metric FIRE_DETECTED {
+        kind single-value;
+        type string;
+    }
+    define metric DETECTION_CONFIDENCE {
+        kind single-value;
+        type string;
+    }
+    define metric DETECTION_LATITUDE {
+        kind single-value;
+        type string;
+    }
+    define metric DETECTION_LONGITUDE {
+        kind single-value;
+        type string;
+    }
+    define metric DETECTED_OBJECTS {
+        kind single-value;
+        type string;
+    }
+    define metric PROCESSED_FILE {
+        kind single-value;
+        type string;
+    }
+    define metric POI_UUID {
+        kind single-value;
+        type string;
+    }
+    define metric POI_CREATED {
+        kind single-value;
+        type string;
+    }
+    define metric MESSAGE_UUID {
+        kind single-value;
+        type string;
+    }
+    define metric MESSAGE_SENT {
+        kind single-value;
+        type string;
+    }
+
+}
