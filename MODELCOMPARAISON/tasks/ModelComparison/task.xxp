@@ -1,0 +1,210 @@
+task ModelComparison {
+    implementation "ModelComparison/task.py";
+    venv "ModelComparison/requirements.txt";
+    python_version "3.9";
+
+    define input data ImagePath;
+    define input data YOLOv8ModelPath;
+    define input data YOLOv5ModelPath;
+    define input data GroundTruthPath;
+
+    define output data Crypto_desktop_samples;
+
+    define param IoUThreshold {
+        type Integer;
+        default 50;
+        range (10, 100);
+    }
+
+    define param image_resolution_scale {
+        type Integer;
+        default 100;
+        range (25, 200);
+    }
+
+    define param blur_kernel_size {
+        type Integer;
+        default 0;
+        range (0, 15);
+    }
+
+    define param noise_level {
+        type Integer;
+        default 0;
+        range (0, 30);
+    }
+
+    define param brightness_factor {
+        type Integer;
+        default 100;
+        range (30, 200);
+    }
+
+    define param contrast_factor {
+        type Integer;
+        default 100;
+        range (30, 200);
+    }
+
+    define param rotation_angle {
+        type Integer;
+        default 0;
+        range (-45, 45);
+    }
+
+    define metric YOLOv8_LOAD_TIME {
+        kind single-value;
+        type double;
+    }
+
+    define metric YOLOv5_LOAD_TIME {
+        kind single-value;
+        type double;
+    }
+
+    define metric YOLOv8_INFERENCE_TIME {
+        kind single-value;
+        type double;
+    }
+
+    define metric YOLOv5_INFERENCE_TIME {
+        kind single-value;
+        type double;
+    }
+
+    define metric YOLOv8_DETECTIONS {
+        kind single-value;
+        type double;
+    }
+
+    define metric YOLOv5_DETECTIONS {
+        kind single-value;
+        type double;
+    }
+
+    define metric YOLOv8_MEAN_CONFIDENCE {
+        kind single-value;
+        type double;
+    }
+
+    define metric YOLOv5_MEAN_CONFIDENCE {
+        kind single-value;
+        type double;
+    }
+
+    define metric YOLOv8_AP {
+        kind single-value;
+        type double;
+    }
+
+    define metric YOLOv5_AP {
+        kind single-value;
+        type double;
+    }
+
+    define metric IOU_THRESHOLD {
+        kind single-value;
+        type double;
+    }
+
+    define metric IMAGE_RESOLUTION_SCALE {
+        kind single-value;
+        type double;
+    }
+
+    define metric BLUR_KERNEL_SIZE {
+        kind single-value;
+        type double;
+    }
+
+    define metric NOISE_LEVEL {
+        kind single-value;
+        type double;
+    }
+
+    define metric BRIGHTNESS_FACTOR {
+        kind single-value;
+        type double;
+    }
+
+    define metric CONTRAST_FACTOR {
+        kind single-value;
+        type double;
+    }
+
+    define metric ROTATION_ANGLE {
+        kind single-value;
+        type double;
+    }
+
+    define metric GROUND_TRUTH_BOXES {
+        kind single-value;
+        type double;
+    }
+
+    define metric IMAGE_WIDTH {
+        kind single-value;
+        type double;
+    }
+
+    define metric IMAGE_HEIGHT {
+        kind single-value;
+        type double;
+    }
+
+    define metric COMPARISON_COMPLETED {
+        kind single-value;
+        type string;
+    }
+
+    // Performance Analysis Metrics
+    define metric YOLOv8_DETECTION_EFFICIENCY {
+        kind single-value;
+        type double;
+    }
+
+    define metric YOLOv5_DETECTION_EFFICIENCY {
+        kind single-value;
+        type double;
+    }
+
+    define metric DETECTION_ADVANTAGE_YOLOv8 {
+        kind single-value;
+        type double;
+    }
+
+    define metric CONFIDENCE_ADVANTAGE_YOLOv8 {
+        kind single-value;
+        type double;
+    }
+
+    define metric AP_ADVANTAGE_YOLOv8 {
+        kind single-value;
+        type double;
+    }
+
+    define metric TRANSFORMATION_COUNT {
+        kind single-value;
+        type double;
+    }
+
+    define metric YOLOv8_ROBUSTNESS_SCORE {
+        kind single-value;
+        type double;
+    }
+
+    define metric YOLOv5_ROBUSTNESS_SCORE {
+        kind single-value;
+        type double;
+    }
+
+    define metric OVERALL_ADVANTAGE_YOLOv8 {
+        kind single-value;
+        type double;
+    }
+
+    define output data YOLOv8_ANNOTATED_IMAGE;
+    define output data YOLOv5_ANNOTATED_IMAGE;
+    define output data PRECISION_RECALL_PLOT;
+
+}

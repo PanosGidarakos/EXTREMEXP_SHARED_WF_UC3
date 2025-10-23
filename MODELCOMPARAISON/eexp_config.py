@@ -7,22 +7,22 @@ PYTHON_DEPENDENCIES_RELATIVE_PATH = 'dependencies'
 
 EXECUTIONWARE = "PROACTIVE"  # other option: "LOCAL"
 # Proactive credentials (only needed if EXECUTIONWARE = "PROACTIVE" above)
-PROACTIVE_URL = ""
-PROACTIVE_USERNAME = ""
-PROACTIVE_PASSWORD = ""
+PROACTIVE_URL = "https://proactive.extremexp-icom.intracom-telecom.com"
+PROACTIVE_USERNAME = "ads_user"
+PROACTIVE_PASSWORD = "}h18?7DhM"
 
 MAX_WORKFLOWS_IN_PARALLEL_PER_NODE = 4
 
-DATA_ABSTRACTION_BASE_URL = ""
-DATA_ABSTRACTION_ACCESS_TOKEN = ''
+DATA_ABSTRACTION_BASE_URL = "https://api.dal.extremexp-icom.intracom-telecom.com/api"
+DATA_ABSTRACTION_ACCESS_TOKEN = '72fcd93c8e91c9a4704f80754369c1dba25e2ecb'
 
 PROACTIVE_PYTHON_VERSIONS = {
     "3.8": "/usr/bin/python3.8", "3.9": "/usr/bin/python3.9"}
 
 DATASET_MANAGEMENT = "DDM"
-DDM_URL = ""
-PORTAL_USERNAME = ""
-PORTAL_PASSWORD = ""
+DDM_URL = "https://ddm.extremexp-icom.intracom-telecom.com"
+PORTAL_USERNAME = "drouglazet"
+PORTAL_PASSWORD = "Alphazero1?"
 
 # logging configuration, optional; if not set, all loggers have INFO level
 LOGGING_CONFIG = {

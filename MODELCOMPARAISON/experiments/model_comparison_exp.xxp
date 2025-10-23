@@ -1,32 +1,23 @@
 workflow ModelComparisonWorkflow {
 
-    task ModelLoader {
-        implementation "ModelLoader";
+    task ModelComparison {
+        implementation "ModelComparison";
     }
 
-    task InferenceEngine {
-        implementation "InferenceEngine";
-    }
-
-    task EvaluationMetrics {
-        implementation "EvaluationMetrics";
-    }
-
-    task Visualization {
-        implementation "Visualization";
-    }
-
-    START -> ModelLoader -> InferenceEngine -> EvaluationMetrics -> Visualization -> END;
-
+    START -> ModelComparison -> END;
 
     define input data ImagePath;
     define input data YOLOv8ModelPath;
     define input data YOLOv5ModelPath;
     define input data GroundTruthPath;
-    define input data IoUThreshold;
+
+    define output data Crypto_desktop_samples;
+    configure data Crypto_desktop_samples {
+        project "starting";
+    }
 
     configure data ImagePath {
-        path "*.jpg";
+        path "fire.*.png";
     }
 
     configure data YOLOv8ModelPath {
@@ -38,43 +29,192 @@ workflow ModelComparisonWorkflow {
     }
 
     configure data GroundTruthPath {
-        path "*.csv";
+        path "fire.*.csv";
     }
 
-    YOLOv8ModelPath --> ModelLoader.YOLOv8ModelPath;
-    YOLOv5ModelPath --> ModelLoader.YOLOv5ModelPath;
-
-    ImagePath --> InferenceEngine.ImagePath;
-    YOLOv8ModelPath --> InferenceEngine.YOLOv8ModelPath;
-    YOLOv5ModelPath --> InferenceEngine.YOLOv5ModelPath;
-
-    GroundTruthPath --> EvaluationMetrics.GroundTruthPath;
-
-    ImagePath --> Visualization.ImagePath;
-
+    ImagePath --> ModelComparison.ImagePath;
+    YOLOv8ModelPath --> ModelComparison.YOLOv8ModelPath;
+    YOLOv5ModelPath --> ModelComparison.YOLOv5ModelPath;
+    GroundTruthPath --> ModelComparison.GroundTruthPath;
+    ModelComparison.Crypto_desktop_samples --> Crypto_desktop_samples;
 }
-
 
 workflow ModelComparisonWorkflow1 from ModelComparisonWorkflow {
 
 }
 
-
 experiment ModelComparisonExperiment {
     intent testModelComparison;
 
     control {
-        START -> S1 -> END;
+        START -> S1 -> S2 -> S3 -> S4 -> S5 -> S6 -> S7 -> END;
     }
 
+    // SPACE 1: Configuration de référence (baseline)
     space S1 of ModelComparisonWorkflow1 {
+        strategy randomsearch;
+        runs = 3;
+
+        param_values iou_threshold_values = range(50, 50, 1);
+        param_values resolution_scale_values = range(100, 100, 1);
+        param_values blur_kernel_values = range(0, 0, 1);
+        param_values noise_level_values = range(0, 0, 1);
+        param_values brightness_values = range(100, 100, 1);
+        param_values contrast_values = range(100, 100, 1);
+        param_values rotation_values = range(0, 0, 1);
+
+        task ModelComparison {
+            param IoUThreshold = iou_threshold_values;
+            param image_resolution_scale = resolution_scale_values;
+            param blur_kernel_size = blur_kernel_values;
+            param noise_level = noise_level_values;
+            param brightness_factor = brightness_values;
+            param contrast_factor = contrast_values;
+            param rotation_angle = rotation_values;
+        }
+    }
+
+    // SPACE 2: Tests de résolution isolés
+    space S2 of ModelComparisonWorkflow1 {
+        strategy randomsearch;
+        runs = 5;
+
+        param_values iou_threshold_values = range(50, 50, 1);
+        param_values resolution_scale_values = range(50, 150, 25);
+        param_values blur_kernel_values = range(0, 0, 1);
+        param_values noise_level_values = range(0, 0, 1);
+        param_values brightness_values = range(100, 100, 1);
+        param_values contrast_values = range(100, 100, 1);
+        param_values rotation_values = range(0, 0, 1);
+
+        task ModelComparison {
+            param IoUThreshold = iou_threshold_values;
+            param image_resolution_scale = resolution_scale_values;
+            param blur_kernel_size = blur_kernel_values;
+            param noise_level = noise_level_values;
+            param brightness_factor = brightness_values;
+            param contrast_factor = contrast_values;
+            param rotation_angle = rotation_values;
+        }
+    }
+
+    // SPACE 3: Tests de flou isolés
+    space S3 of ModelComparisonWorkflow1 {
+        strategy randomsearch;
+        runs = 5;
+
+        param_values iou_threshold_values = range(50, 50, 1);
+        param_values resolution_scale_values = range(100, 100, 1);
+        param_values blur_kernel_values = range(0, 12, 3);
+        param_values noise_level_values = range(0, 0, 1);
+        param_values brightness_values = range(100, 100, 1);
+        param_values contrast_values = range(100, 100, 1);
+        param_values rotation_values = range(0, 0, 1);
+
+        task ModelComparison {
+            param IoUThreshold = iou_threshold_values;
+            param image_resolution_scale = resolution_scale_values;
+            param blur_kernel_size = blur_kernel_values;
+            param noise_level = noise_level_values;
+            param brightness_factor = brightness_values;
+            param contrast_factor = contrast_values;
+            param rotation_angle = rotation_values;
+        }
+    }
+
+    // SPACE 4: Tests de bruit isolés
+    space S4 of ModelComparisonWorkflow1 {
         strategy randomsearch;
         runs = 4;
 
-        param_values iou_threshold_values = range(30, 80);
+        param_values iou_threshold_values = range(50, 50, 1);
+        param_values resolution_scale_values = range(100, 100, 1);
+        param_values blur_kernel_values = range(0, 0, 1);
+        param_values noise_level_values = range(0, 20, 10);
+        param_values brightness_values = range(100, 100, 1);
+        param_values contrast_values = range(100, 100, 1);
+        param_values rotation_values = range(0, 0, 1);
 
-        task EvaluationMetrics {
+        task ModelComparison {
             param IoUThreshold = iou_threshold_values;
+            param image_resolution_scale = resolution_scale_values;
+            param blur_kernel_size = blur_kernel_values;
+            param noise_level = noise_level_values;
+            param brightness_factor = brightness_values;
+            param contrast_factor = contrast_values;
+            param rotation_angle = rotation_values;
+        }
+    }
+
+    // SPACE 5: Tests de luminosité/contraste isolés
+    space S5 of ModelComparisonWorkflow1 {
+        strategy randomsearch;
+        runs = 6;
+
+        param_values iou_threshold_values = range(50, 50, 1);
+        param_values resolution_scale_values = range(100, 100, 1);
+        param_values blur_kernel_values = range(0, 0, 1);
+        param_values noise_level_values = range(0, 0, 1);
+        param_values brightness_values = range(50, 150, 25);
+        param_values contrast_values = range(50, 150, 25);
+        param_values rotation_values = range(0, 0, 1);
+
+        task ModelComparison {
+            param IoUThreshold = iou_threshold_values;
+            param image_resolution_scale = resolution_scale_values;
+            param blur_kernel_size = blur_kernel_values;
+            param noise_level = noise_level_values;
+            param brightness_factor = brightness_values;
+            param contrast_factor = contrast_values;
+            param rotation_angle = rotation_values;
+        }
+    }
+
+    // SPACE 6: Tests de rotation isolés
+    space S6 of ModelComparisonWorkflow1 {
+        strategy randomsearch;
+        runs = 5;
+
+        param_values iou_threshold_values = range(50, 50, 1);
+        param_values resolution_scale_values = range(100, 100, 1);
+        param_values blur_kernel_values = range(0, 0, 1);
+        param_values noise_level_values = range(0, 0, 1);
+        param_values brightness_values = range(100, 100, 1);
+        param_values contrast_values = range(100, 100, 1);
+        param_values rotation_values = range(-30, 30, 15);
+
+        task ModelComparison {
+            param IoUThreshold = iou_threshold_values;
+            param image_resolution_scale = resolution_scale_values;
+            param blur_kernel_size = blur_kernel_values;
+            param noise_level = noise_level_values;
+            param brightness_factor = brightness_values;
+            param contrast_factor = contrast_values;
+            param rotation_angle = rotation_values;
+        }
+    }
+
+    // SPACE 7: Tests combinés (conditions difficiles)
+    space S7 of ModelComparisonWorkflow1 {
+        strategy randomsearch;
+        runs = 8;
+
+        param_values iou_threshold_values = range(50, 60, 10);
+        param_values resolution_scale_values = range(75, 125, 25);
+        param_values blur_kernel_values = range(3, 9, 3);
+        param_values noise_level_values = range(10, 20, 10);
+        param_values brightness_values = range(75, 125, 25);
+        param_values contrast_values = range(75, 125, 25);
+        param_values rotation_values = range(-15, 15, 15);
+
+        task ModelComparison {
+            param IoUThreshold = iou_threshold_values;
+            param image_resolution_scale = resolution_scale_values;
+            param blur_kernel_size = blur_kernel_values;
+            param noise_level = noise_level_values;
+            param brightness_factor = brightness_values;
+            param contrast_factor = contrast_values;
+            param rotation_angle = rotation_values;
         }
     }
 }
