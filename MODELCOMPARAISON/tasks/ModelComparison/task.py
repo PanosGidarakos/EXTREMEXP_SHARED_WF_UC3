@@ -1,3 +1,5 @@
+import os
+[sys.path.append(os.path.join(os.getcwd(), folder)) for folder in variables.get("dependent_modules_folders").split(",")]
 import cv2
 import numpy as np
 import torch
@@ -10,7 +12,7 @@ from sklearn.metrics import precision_recall_curve, average_precision_score
 import matplotlib.pyplot as plt
 import random
 import glob
-import proactive as ph
+import proactive_helper as ph
 
 
 def df_to_csv_bytes(df):
@@ -733,12 +735,24 @@ def run_model_comparison():
         print(f"  YOLOv8 Annotated: {yolov8_output}")
         print(f"  YOLOv5 Annotated: {yolov5_output}")
         print(f"  PR Curve Plot: {pr_plot_path}")
+        # Read YOLOv8 annotated image and convert to bytes
+        if os.path.exists(yolov8_output):
+            with open(yolov8_output, "rb") as f:
+                yolov8_bytes = f.read()
+            print(f"YOLOv8 Annotated image loaded as {len(yolov8_bytes)} bytes")
+        else:
+            yolov8_bytes = None
+            print(f"⚠️ YOLOv8 annotated image not found at: {yolov8_output}")
+
+                
         
         print("\n" + "=" * 80)
         print("MODEL COMPARISON COMPLETED SUCCESSFULLY!")
         print("=" * 80)
-
-        ph.save_datasets(variables, resultMap, "Crypto_desktop_samples",[df_to_csv_bytes(pred_df_v5),df_to_csv_bytes(pred_df_v5)],['df1.csv','df2.csv'])
+        print("pred_df_v5:", pred_df_v5)
+        # read the images from yolov8_output
+       
+        ph.save_datasets(variables, resultMap, "Crypto_desktop_samples",[df_to_csv_bytes(pred_df_v5),df_to_csv_bytes(pred_df_v5),yolov8_bytes],['df1.csv','df2.csv','yolov8_annotated.png'])
 
         
     except Exception as e:
