@@ -758,9 +758,29 @@ def run_model_comparison():
         print("MODEL COMPARISON COMPLETED SUCCESSFULLY!")
         print("=" * 80)
         print("pred_df_v5:", pred_df_v5)
-        # read the images from yolov8_output
+        
+        # Read original image and ground truth for dataset
+        with open(image_path, "rb") as f:
+            original_image_bytes = f.read()
+        print(f"Original image loaded: {os.path.basename(image_path)} ({len(original_image_bytes)} bytes)")
+        
+        with open(ground_truth_path, "rb") as f:
+            ground_truth_bytes = f.read()
+        print(f"Ground truth loaded: {os.path.basename(ground_truth_path)} ({len(ground_truth_bytes)} bytes)")
+        
+        # Read transformed image
+        with open(transformed_path, "rb") as f:
+            transformed_image_bytes = f.read()
+        print(f"Transformed image loaded: {os.path.basename(transformed_path)} ({len(transformed_image_bytes)} bytes)")
+        
+        # Read PR plot
+        with open(pr_plot_path, "rb") as f:
+            pr_plot_bytes = f.read()
+        print(f"PR plot loaded: {os.path.basename(pr_plot_path)} ({len(pr_plot_bytes)} bytes)")
 
-        ph.save_datasets(variables, resultMap, "Crypto_desktop_samples",[df_to_csv_bytes(pred_df_v5),df_to_csv_bytes(pred_df_v8),yolov8_bytes,yolov5_output],['pred_df_v5.csv','pred_df_v8.csv','yolov8_annotated.png','yolov5_annotated.png'])
+        ph.save_datasets(variables, resultMap, "Crypto_desktop_samples",
+                         [df_to_csv_bytes(pred_df_v5), df_to_csv_bytes(pred_df_v8), yolov8_bytes, yolov5_output, original_image_bytes, ground_truth_bytes, transformed_image_bytes, pr_plot_bytes],
+                         ['pred_df_v5.csv', 'pred_df_v8.csv', 'yolov8_annotated.png', 'yolov5_annotated.png', 'original_image.jpg', 'ground_truth.csv', 'transformed_image.jpg', 'precision_recall_plot.png'])
 
         
     except Exception as e:
