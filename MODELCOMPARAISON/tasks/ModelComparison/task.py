@@ -744,6 +744,14 @@ def run_model_comparison():
             yolov8_bytes = None
             print(f"⚠️ YOLOv8 annotated image not found at: {yolov8_output}")
 
+        if os.path.exists(yolov5_output):
+            with open(yolov5_output, "rb") as f:
+                yolov5_output = f.read()
+            print(f"YOLOv5 Annotated image loaded as {len(yolov5_output)} bytes")
+        else:
+            yolov5_output = None
+            print(f"⚠️ YOLOv5 annotated image not found at: {yolov5_output}")
+
                 
         
         print("\n" + "=" * 80)
@@ -751,8 +759,8 @@ def run_model_comparison():
         print("=" * 80)
         print("pred_df_v5:", pred_df_v5)
         # read the images from yolov8_output
-       
-        ph.save_datasets(variables, resultMap, "Crypto_desktop_samples",[df_to_csv_bytes(pred_df_v5),df_to_csv_bytes(pred_df_v5),yolov8_bytes],['df1.csv','df2.csv','yolov8_annotated.png'])
+
+        ph.save_datasets(variables, resultMap, "Crypto_desktop_samples",[df_to_csv_bytes(pred_df_v5),df_to_csv_bytes(pred_df_v8),yolov8_bytes,yolov5_output],['pred_df_v5.csv','pred_df_v8.csv','yolov8_annotated.png','yolov5_annotated.png'])
 
         
     except Exception as e:
